@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func Listen() {
@@ -15,6 +16,10 @@ func Listen() {
 func main() {
 	go Listen()
 	token := os.Getenv("TOKEN")
+	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
+	if err != nil {
+		log.Fatalln("Error env:", err)
+	}
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Fatal("Error bot creation", err)
@@ -26,7 +31,7 @@ func main() {
 	}
 	updates := bot.ListenForWebhook("/")
 	for update := range updates {
-		_, err := bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Let Furgal free!"))
+		_, err := bot.Send(tgbotapi.NewMessage(int64(chatID), "Let Furgal free!"))
 		if err != nil {
 			log.Printf("Error sending on %v", update)
 		}
