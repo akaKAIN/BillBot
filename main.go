@@ -9,15 +9,15 @@ import (
 	"strconv"
 )
 
-func Listen(port string, token string) {
-	url := fmt.Sprintf(":%v/%v", port, token)
+func Listen(port string) {
+	url := fmt.Sprintf(":%v", port)
 	log.Fatal(http.ListenAndServe(url, nil))
 }
 
 func main() {
 	token := os.Getenv("TOKEN")
 	port := os.Getenv("PORT")
-	go Listen(port, token)
+	go Listen(port)
 	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
 	if err != nil {
 		log.Fatalln("Error env:", err)
@@ -32,7 +32,7 @@ func main() {
 		log.Fatalf("Setting webhook %v", webhook)
 	}
 
-	updates := bot.ListenForWebhook("/" + token)
+	updates := bot.ListenForWebhook("/")
 	baseText := "Let Furgal free!\n"
 	for update := range updates {
 		text := fmt.Sprintf("%v%+v\n", baseText, update)
