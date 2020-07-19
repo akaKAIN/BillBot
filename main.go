@@ -15,9 +15,10 @@ var DATA Data
 
 func ImDontSleep(){
 	start := time.Now()
+	duration := time.Minute * 5
 	for {
-		time.Sleep(time.Minute)
-		start.Add(time.Minute)
+		time.Sleep(duration)
+		start.Add(duration)
 	}
 }
 

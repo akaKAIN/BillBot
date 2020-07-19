@@ -44,7 +44,7 @@ func ParserPipeLine(text string) {
 }
 
 func PrintBill() {
-	var answer string
+	answer := "Расходы:\n"
 	for _, val := range DATA.Bill.List {
 		answer += fmt.Sprintf("%v: %v\n", val.Position, val.FullCost)
 	}
