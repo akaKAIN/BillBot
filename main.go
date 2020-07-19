@@ -48,14 +48,13 @@ func main() {
 	DATA.Bot = bot
 	fmt.Printf("%+v", DATA)
 	updates := bot.ListenForWebhook("/")
-	baseText := "Let Furgal free!\n"
 	for update := range updates {
 		if update.Message.Text == "баланс" {
 			PrintBill()
 			continue
 		}
 		go ParserPipeLine(update.Message.Text)
-		text := fmt.Sprintf("%v%+v\n", baseText, update.Message.Text)
+		text := fmt.Sprintf("%v\n", update.Message.Text)
 		go Send(text)
 	}
 }
