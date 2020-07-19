@@ -29,8 +29,13 @@ func Sum(o *Operation) {
 	for ind, v := range DATA.Bill.List {
 		if o.Position == v.Position {
 			DATA.Bill.List[ind].FullCost += o.Cost
+			return
 		}
 	}
+	DATA.Bill.List = append(DATA.Bill.List, Balance{
+		Position: o.Position,
+		FullCost: o.Cost,
+	})
 }
 
 func ParserPipeLine(text string) {
@@ -40,5 +45,5 @@ func ParserPipeLine(text string) {
 
 func PrintBill() {
 	bill := fmt.Sprintf("%+v", DATA.Bill)
-	Send(DATA.Bot, bill)
+	Send(bill)
 }

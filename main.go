@@ -16,8 +16,8 @@ func Listen(port string) {
 	log.Fatal(http.ListenAndServe(url, nil))
 }
 
-func Send(bot *tgbotapi.BotAPI, text string) {
-	_, err := bot.Send(tgbotapi.NewMessage(int64(DATA.CHAT_ID), text))
+func Send(text string) {
+	_, err := DATA.Bot.Send(tgbotapi.NewMessage(int64(DATA.CHAT_ID), text))
 	if err != nil {
 		log.Printf("Error SENDing: %v", err)
 	}
@@ -46,6 +46,7 @@ func main() {
 		log.Fatalf("Setting webhook %v", webhook)
 	}
 	DATA.Bot = bot
+	fmt.Printf("%+v", DATA)
 	updates := bot.ListenForWebhook("/")
 	baseText := "Let Furgal free!\n"
 	for update := range updates {
@@ -54,6 +55,6 @@ func main() {
 		}
 		ParserPipeLine(update.Message.Text)
 		text := fmt.Sprintf("%v%+v\n", baseText, update.Message.Text)
-		Send(bot, text)
+		Send(text)
 	}
 }
