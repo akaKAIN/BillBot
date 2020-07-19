@@ -7,9 +7,19 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
+	"time"
 )
 
 var DATA Data
+
+func ImDontSleep(){
+	start := time.Now()
+	for {
+		time.Sleep(time.Minute)
+		start.Add(time.Minute)
+	}
+}
 
 func Listen(port string) {
 	url := fmt.Sprintf(":%v", port)
@@ -47,14 +57,16 @@ func main() {
 	}
 	DATA.Bot = bot
 	fmt.Printf("%+v", DATA)
+	go ImDontSleep()
 	updates := bot.ListenForWebhook("/")
 	for update := range updates {
-		if update.Message.Text == "баланс" {
+		lowerText := strings.ToLower(update.Message.Text)
+		if lowerText == "баланс" {
 			PrintBill()
 			continue
 		}
-		go ParserPipeLine(update.Message.Text)
-		text := fmt.Sprintf("%v\n", update.Message.Text)
-		go Send(text)
+		ParserPipeLine(lowerText)
+		text := fmt.Sprintf("%v\n", lowerText)
+		Send(text)
 	}
 }
