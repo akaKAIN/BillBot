@@ -45,7 +45,7 @@ func main() {
 	if _, err := bot.SetWebhook(tgbotapi.NewWebhook(webhook)); err != nil {
 		log.Fatalf("Setting webhook %v", webhook)
 	}
-
+	DATA.Bot = bot
 	updates := bot.ListenForWebhook("/")
 	baseText := "Let Furgal free!\n"
 	for update := range updates {
