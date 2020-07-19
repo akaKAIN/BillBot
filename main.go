@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"net/http"
@@ -8,14 +9,15 @@ import (
 	"strconv"
 )
 
-func Listen() {
-	port := os.Getenv("PORT")
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+func Listen(port string, token string) {
+	url := fmt.Sprintf(":%v/%v", port, token)
+	log.Fatal(http.ListenAndServe(url, nil))
 }
 
 func main() {
-	go Listen()
 	token := os.Getenv("TOKEN")
+	port := os.Getenv("PORT")
+	go Listen(port, token)
 	chatID, err := strconv.Atoi(os.Getenv("CHAT_ID"))
 	if err != nil {
 		log.Fatalln("Error env:", err)
@@ -29,9 +31,12 @@ func main() {
 	if _, err := bot.SetWebhook(tgbotapi.NewWebhook(webhook)); err != nil {
 		log.Fatalf("Setting webhook %v", webhook)
 	}
-	updates := bot.ListenForWebhook("/")
+
+	updates := bot.ListenForWebhook("/" + token)
+	baseText := "Let Furgal free!\n"
 	for update := range updates {
-		_, err := bot.Send(tgbotapi.NewMessage(int64(chatID), "Let Furgal free!"))
+		text := fmt.Sprintf("%v%+v\n", baseText, update)
+		_, err := bot.Send(tgbotapi.NewMessage(int64(chatID), text))
 		if err != nil {
 			log.Printf("Error sending on %v", update)
 		}
