@@ -26,8 +26,8 @@ func ParseMessage(text string) *Operation {
 }
 
 func Sum(o *Operation) {
-	for ind, v := range DATA.Bill.List {
-		if o.Position == v.Position {
+	for ind, val := range DATA.Bill.List {
+		if o.Position == val.Position {
 			DATA.Bill.List[ind].FullCost += o.Cost
 			return
 		}

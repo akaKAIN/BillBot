@@ -52,9 +52,10 @@ func main() {
 	for update := range updates {
 		if update.Message.Text == "баланс" {
 			PrintBill()
+			continue
 		}
-		ParserPipeLine(update.Message.Text)
+		go ParserPipeLine(update.Message.Text)
 		text := fmt.Sprintf("%v%+v\n", baseText, update.Message.Text)
-		Send(text)
+		go Send(text)
 	}
 }
