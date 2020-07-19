@@ -35,7 +35,7 @@ func main() {
 	updates := bot.ListenForWebhook("/")
 	baseText := "Let Furgal free!\n"
 	for update := range updates {
-		text := fmt.Sprintf("%v%+v\n", baseText, update)
+		text := fmt.Sprintf("%v%+v\n", baseText, update.Message)
 		_, err := bot.Send(tgbotapi.NewMessage(int64(chatID), text))
 		if err != nil {
 			log.Printf("Error sending on %v", update)
